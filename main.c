@@ -1,6 +1,5 @@
-// TODO Napisz co masz wgl do zrobienie w tym projekcie 
-// popros o rozmiar tablicy NxN
-// wypełnij tablice 
+// popros o rozmiar tablicy NxN -- DONE 
+// wypełnij tablice -- DONE 
 // sprawdz jakie ma klastry wewnatrz
 // ponumeruj kalstry 
 // zaznacz które klastry są przeciekające 
