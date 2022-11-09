@@ -1,3 +1,3 @@
 ### Projekt na PROS
 
-Wizualizacja perlokacji macierzowej w jezyku C.
+Wizualizacja perkolacja macierzowej w jezyku C.
