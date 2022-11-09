@@ -10,7 +10,6 @@
 #include <time.h>
 
 
-
 #define TAB_SIZE 64
 
 int main(void){
