@@ -1,0 +1,1 @@
+gcc -shared -o example.dll example.c -IC:\Python38\include -IC:\Python38\include\win32 -LC:\Python38\libs -lpython38
