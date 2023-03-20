@@ -1,39 +1,39 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <Python.h>
-
 
 
 typedef enum { false, true } bool;
 
-// konwencja adresowania (x,y)--->(i%user_size,i/user_size)
+int perkolacja(int user_size,int treshhold);
 
-
-int main(void){
-    perkolacja(a,b);
-    return 0; 
-
+int main(int argc, char const *argv[])
+{
+    perkolacja(5,3);
+    return 0;
 }
+
+
+// konwencja adresowania (x,y)--->(i%user_size,i/user_size)
 
 
 int perkolacja(int user_size,int treshhold){
 
     int index = 0;
-    int cluster = 2;
+    int cluster = 2;    
 
 
     //? rezerwowanie pamiecie dla tablicy
-    int* tab = (int*) malloc(sizeof(int) * user_size*user_size); 
-    if(tab == NULL) { 
+    int* tab = (int*) malloc(sizeof(int) * user_size*user_size);
+    if(tab == NULL) {
         printf("Error! memory not allocated.");
         exit(0);
     }
 
 
-//? rezerwowanie pamieci dla tablicy zmain 
-    int* tab_zmian = (int*) malloc(sizeof(int) * user_size*user_size/2);  
-        if(tab_zmian == NULL) { 
+//? rezerwowanie pamieci dla tablicy zmain
+    int* tab_zmian = (int*) malloc(sizeof(int) * user_size*user_size/2);
+        if(tab_zmian == NULL) {
             printf("Error! memory not allocated.");
             exit(0);
         }
@@ -41,24 +41,24 @@ int perkolacja(int user_size,int treshhold){
             tab_zmian[i]=0;
         }
 
-    int* tab_wynik = (int*) malloc(sizeof(int) *user_size);  
-            if(tab_wynik == NULL) { 
+    int* tab_wynik = (int*) malloc(sizeof(int) *user_size);
+            if(tab_wynik == NULL) {
                 printf("Error! memory not allocated.");
                 exit(0);
             }
 
-    //? inicjowanie przypadkowosci w kodzie 
+    //? inicjowanie przypadkowosci w kodzie
     time_t tt;
-    int seed = time(&tt); 
+    int seed = time(&tt);
     srand(seed);
 
 
     //? wypelnianie tablicy
     for(int i = 0; i < user_size*user_size; i++){
             int guess = rand()%100;
-            if(guess>treshhold) tab[i]=1; 
+            if(guess>treshhold) tab[i]=1;
             else tab[i]=0;
-        
+
     }
 
     // printf("macierz bez klastrow\n");
@@ -92,12 +92,12 @@ int perkolacja(int user_size,int treshhold){
                 }
                 if(tab[i-1]!=0 && tab[i-user_size]==0){
                     if(tab[i-1]!=0){
-                        tab[i]=tab[i-1];//? problem z inkrementacja clustra 
+                        tab[i]=tab[i-1];//? problem z inkrementacja clustra
                     }
                 }
                 if(tab[i-1]==0 && tab[i-user_size]!=0){
                     if(tab[i-user_size]!=0){
-                        tab[i]=tab[i-user_size]; 
+                        tab[i]=tab[i-user_size];
                     }
                 }
                 if(tab[i-1]==0 && tab[i-user_size]==0){
@@ -122,7 +122,7 @@ int perkolacja(int user_size,int treshhold){
                     cluster++;
                     tab[i]=cluster;
                 }
-                
+
             }
         }
     }
@@ -130,24 +130,24 @@ int perkolacja(int user_size,int treshhold){
     // printf("macierz z klastrami\n");
     // for(int i=0;i<user_size*user_size;i++){
     //     if(i%user_size==0)printf("\n");
-    //     printf("%d ",tab[i]);        
+    //     printf("%d ",tab[i]);
     // }
     // printf("\n");
 
     // printf("macierz zmian\n");
     // for(int i=0;i<user_size*user_size/2;i++){
-    //     printf("%d |",tab_zmian[i]);        
+    //     printf("%d |",tab_zmian[i]);
     // }
     // printf("\n");
 
 
-    //podmiana klastrow niewlasciwie ponumerowanych 
+    //podmiana klastrow niewlasciwie ponumerowanych
     for(int k=cluster;k>1;k--){
         if(tab_zmian[k]!=0){
             for(int i = 0; i < user_size*user_size; i++){
                 if (tab[i]==k){
                     tab[i]=tab[k];
-                }   
+                }
             }
         }
     }
@@ -156,11 +156,11 @@ int perkolacja(int user_size,int treshhold){
     // printf("macierz z klastrami poprawiona\n");
     // for(int i=0;i<user_size*user_size;i++){
     //     if(i%user_size==0)printf("\n");
-    //     printf("%d ",tab[i]);        
+    //     printf("%d ",tab[i]);
     // }
     // printf("\n");
 
-    //prerkolacja 
+    //prerkolacja
     for(int k=cluster;k>1;k--){
         bool left = false;
         bool right = false;
@@ -182,9 +182,9 @@ int perkolacja(int user_size,int treshhold){
             tab_wynik[index]=k;
             index++;
         }
-            
+
         }
-        
+
     if(index==0){
         printf("Nie wystepuja klastry perkolujace!");
     }
@@ -198,30 +198,6 @@ int perkolacja(int user_size,int treshhold){
     free(tab);
     free(tab_zmian);
     free(tab_wynik);
-}
 
-static PyObject* wrap_perkolacja(PyObject* self, PyObject* args) {
-    int a, b;
-    if (!PyArg_ParseTuple(args, "ii", &a, &b)) {
-        return NULL;
-    }
-    int result = perkolacja(a, b);
-    return Py_BuildValue("i", result);
-}
-
-static PyMethodDef methods[] = {
-    {"perkolacja", wrap_add, METH_VARARGS, "Przeprowadza symulacje perkolacji macierzowej."},
-    {NULL, NULL, 0, NULL}
-};
-
-static struct PyModuleDef module = {
-    PyModuleDef_HEAD_INIT,
-    "perkolacja",
-    NULL,
-    -1,
-    methods
-};
-
-PyMODINIT_FUNC PyInit_example(void) {
-    return PyModule_Create(&module);
+    return 0;
 }

@@ -1,15 +1,12 @@
-from ctypes import *
+from ctypes import WinDLL
 
-MAX_SIZE = 64
-input_rozmiar = -1
-input_praw = -1
+cPerkolacja = WinDLL(r"c:\Users\janbu\Documents\VS_Code\C\Projekt_PROS\mydll.dll")
 
-while input_rozmiar < 0 or input_rozmiar > MAX_SIZE:
-    input_rozmiar = int(input("Podaj rozmiar macierzy"))
+print("Witam, podaj rozmiar tablicy:")
 
-while input_praw < 0 or input_praw > 100:
-    input_praw = int(input("Podaj prawdopodobienstwo wystopienia zera w macierzy"))
+rozmiar = input()
 
-example = CDLL('./perkolacja.so')
-result = example.add(input_rozmiar, input_praw)
-print(result) # 5
+print("Podaj prawdopodobieństwo wystąpienia 0:")
+prog = input()
+
+cPerkolacja.perkolacja(rozmiar, prog)
